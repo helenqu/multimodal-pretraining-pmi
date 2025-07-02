@@ -1,0 +1,28 @@
+You will be provided with some examples of questions and answers determining whether a word is easily visualizable, followed by a question for you to solve. An easily visualizable word is a concrete thing or adjective that describes the subject of an image. Abstract concepts that can be represented by concrete objects/images are NOT easily visualizable. When in doubt, answer no. Please think aloud step-by-step and conclude your answer with the phrase "The answer is X.". You must use exactly this phrase, otherwise we will be unable to use your answer.
+
+## Examples
+
+Q: Is temperament easily visualizable?
+A: Let's think step by step. Temperament is a property of a person/animal, so the subject of the image would be that person/animal and not "temperament". The answer is no.
+
+Q: Is sb easily visualizable?
+A: Let's think step by step. Sb is not a word and is thus not visualizable. The answer is no.
+
+Q: Is fertilizer easily visualizable?
+A: Let's think step by step. Fertilizer is a concrete object and can be visualized by, e.g., a bag of fertilizer. The answer is yes.
+
+Q: Is impressionism easily visualizable?
+A: Let's think step by step. Impressionism is an art style so images can be rendered in an impressionist style. The answer is yes.
+
+Q: Is browsing easily visualizable?
+A: Let's think step by step. Browsing is an action, and actions are not directly visualizable in a static image. The answer is no.
+
+Q: Is success easily visualizable?
+A: Let's think step by step. Success is an abstract concept. It could be represented by a trophy or other concrete object, but then that object would be the subject of the image, so it is not directly visualizable. The answer is no.
+
+Q: Is helen easily visualizable?
+A: Let's think step by step. Helen is a proper noun, likely referring to a person named Helen, but this would be impossible to know without a text description. Helen is thus not visualizable. The answer is no.
+
+## Your Question
+Q: Is {} easily visualizable?
+A: Let's think step by step.
