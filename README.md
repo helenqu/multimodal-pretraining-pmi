@@ -98,6 +98,6 @@ To evaluate a finetuned model, run:
 
 ### LLaVA-1.5 VQA Evals
 
-Code and instructions for the fine-tuning the custom LLaVA-1.5 based on LAION-400M-pretrained CLIP and VQA evals are provided in a separate repository.
+Code and instructions for the fine-tuning the custom LLaVA-1.5 based on LAION-400M-pretrained CLIP and VQA evals are provided in [this repository](https://github.com/helenqu/llava-pretraining-pmi).
 
 
