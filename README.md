@@ -54,16 +54,16 @@ python vlm_eval/vqa_pair_freqs.py \
 ## Datasets
 
 ### GenPairs Dataset
-
-To create the GenPairs dataset, run:
+The GenPairs dataset used in our evaluations can be downloaded [here](https://huggingface.co/datasets/helenqu/GenPairs).
+To create your own version of the GenPairs dataset, run:
 
 ```bash
 ./scripts/create_genpairs.sh <path_to_pairs_data> <output_path>
 ```
 
-### ImageNet-Pairs Dataset
-
-To create the ImageNet-Pairs dataset, run:
+### ImageNet-Paste Dataset
+The ImageNet-Paste dataset used in our evaluations can be downloaded [here](https://huggingface.co/datasets/helenqu/ImageNet-Paste).
+To create your own version of the ImageNet-Paste dataset, run:
 
 ```bash
 ./scripts/create_imagenetpairs.sh
