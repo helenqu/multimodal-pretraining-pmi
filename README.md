@@ -11,9 +11,10 @@ pip install -r requirements.txt
 
 You will also need to download:
 - LAION-400M captions
-- ImageNet validation set (to create the ImageNet-Pairs dataset)
 - TextVQA
 - VQAv2
+- [GenPairs](https://huggingface.co/datasets/helenqu/GenPairs) (synthetic dataset of images generated from concept pairs)
+- [ImageNet-Paste](https://huggingface.co/datasets/helenqu/ImageNet-Paste) (ImageNet validation set augmented by pasting in images of other concepts)
 
 ## Concept Pair Extraction and PMI Calculation
 
