@@ -137,8 +137,6 @@ def filter_visualizable_words(words, outpath, batch_size=8):
     with distributed_state.split_between_processes(tokenized_prompts) as batched_prompts:
         if distributed_state.is_main_process:
             pbar = tqdm(total=len(batched_prompts), desc="Processing")
-            # DEBUGGING
-            print(f"num batches: {len(batched_prompts)}")
 
         # each batch is a list: [pairs, tokenized_prompts]
         for i, (words, batch) in enumerate(batched_prompts):
@@ -153,14 +151,14 @@ def filter_visualizable_words(words, outpath, batch_size=8):
                 pbar.update(1)
                 if i % 10 == 0:
                     print_progress(pbar, decoded)
-    # if distributed_state.is_main_process:
+
     all_outputs = gather_object(outputs_per_process)
     print(f"gathered outputs: {len(all_outputs)}")
     all_words = gather_object(words_per_process)
 
     output_df = pd.DataFrame({
         "other_word": all_words,
-        "is_visualizable": all_outputs,#[parse_output(x) for x in all_outputs],
+        "is_visualizable": all_outputs,
     })
     print(output_df.head())
 
@@ -169,7 +167,6 @@ def filter_visualizable_words(words, outpath, batch_size=8):
     print(f"filtering results written to {outpath}")
 
     return output_df[output_df['is_visualizable'] == "yes"]['other_word'].tolist()
-
 
 def filter_captions(captions, batch_size=16):
     def filter_outputs(captions, outputs):
@@ -227,8 +224,6 @@ def filter_captions(captions, batch_size=16):
     with distributed_state.split_between_processes(tokenized_prompts) as batched_prompts:
         if distributed_state.is_main_process:
             pbar = tqdm(total=len(batched_prompts), desc="Filtering")
-            # DEBUGGING
-            print(f"num batches: {len(batched_prompts)}")
 
         # each batch is a list: [pairs, tokenized_prompts]
         for i, (ids, batch) in enumerate(batched_prompts):

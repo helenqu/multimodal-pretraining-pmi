@@ -1,5 +1,4 @@
 import os
-import pdb
 from pathlib import Path
 import torch
 
@@ -123,7 +122,6 @@ class Dataset:
             )
 
         def get_test_path(self):
-            # test and train datasets are in different self.locations
             return Path(self.location) / self.name()
 
         def get_train_sampler(self):
@@ -134,7 +132,6 @@ class Dataset:
 
         def get_test_dataset(self):
             return ImageFolderWithPaths(self.get_test_path(), transform=self.preprocess)
-            
 
     class ImageNetTrain(ImageNet):
         def get_test_dataset(self):
@@ -168,15 +165,7 @@ class Dataset:
             self.populate_test()
         
         def populate_train(self):
-            self.train_dataset = ImageFolderWithPaths(
-                os.path.join(self.location, self.name()),
-                transform=self.preprocess)
-            self.train_loader = torch.utils.data.DataLoader(
-                self.train_dataset,
-                batch_size=self.batch_size,
-                num_workers=self.num_workers,
-                shuffle=True
-            )
+            pass 
         
         def populate_test(self):
             self.test_dataset = ImageFolderWithPaths(
@@ -194,73 +183,13 @@ class Dataset:
         
         def name(self):
             raise NotImplementedError()
-    
-    class CustomDatasetEval(CustomDataset):
-        def populate_train(self):
-            pass
-    
-    class FreqEval(CustomDatasetEval):
-        def post_loop_metrics(self, all_labels, all_preds, all_metadata, args):
-            if isinstance(all_metadata[0], torch.Tensor):
-                ids = [x.item() for x in all_metadata]
-            else:
-                ids = [Path(x).name.split(".")[0] for x in all_metadata]
 
-            outpath = Path(args.data_location) / self.name() / f"{Path(args.model_path).parent.parent.name}_FT_predictions.csv"
-            df = save_results(ids, all_preds, all_labels.cpu().tolist(), outpath)
-
-            return {"class-level accuracy": df[df['target'] == df['pred1']].shape[0] / df.shape[0]}
-    
-    class Freq0(FreqEval):
-        def name(self):
-            return "freq_0"
-
-    class Freq1To2(FreqEval):
-        def name(self):
-            return "freq_1.00-2.93"
-
-    class Freq1847To5411(FreqEval):
-        def name(self):
-            return "freq_1847.85-5411.70"
-
-    class Freq215To630(FreqEval):
-        def name(self):
-            return "freq_215.44-630.96"
-
-    class Freq25To73(FreqEval):
-        def name(self):
-            return "freq_25.12-73.56"
-
-    class Freq2To8(FreqEval):
-        def name(self):
-            return "freq_2.93-8.58"
-
-    class Freq5411To1100000(FreqEval):
-        def name(self):
-            return "freq_5411.70-1100000.00"
-
-    class Freq630To1847(FreqEval):
-        def name(self):
-            return "freq_630.96-1847.85"
-
-    class Freq73To215(FreqEval):
-        def name(self):
-            return "freq_73.56-215.44"
-
-    class Freq8To25(FreqEval):
-        def name(self):
-            return "freq_8.58-25.12"
-    
-    class ZeroFreqTrain(CustomDataset):
-        def populate_test(self):
-            pass
-
-        def name(self):
-            return "zero_freq_train"
-
-    class FreqAttack(CustomDatasetEval):
         def post_loop_metrics(self, all_labels, all_preds, all_metadata, args):
             outpath = Path(args.data_location) / self.name() / f"{Path(args.model_path).parent.parent.name}_FT_predictions.csv"
             df = save_results([Path(x).name.split(".")[0] for x in all_metadata], all_preds, all_labels.cpu().tolist(), outpath)
 
             return {"class-level accuracy": class_level_acc(df, "zero" in self.name())}
+    
+    class ImageNetPasteEval(CustomDataset):
+        def name(self):
+            return "imagenet_paste"

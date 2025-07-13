@@ -8,8 +8,6 @@ import gzip
 import pyarrow.parquet as pq
 import pdb
 
-#TODO: reorder pairs so the imagenet word is second, or store the words in separate columns
-
 class FrequencyFilter:
     def __init__(self, freq_threshold, input_path):
         self.freq_threshold = freq_threshold

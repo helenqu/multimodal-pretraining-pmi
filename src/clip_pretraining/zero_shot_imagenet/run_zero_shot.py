@@ -8,7 +8,6 @@ import torchvision.datasets as datasets
 from tqdm import tqdm
 import argparse
 import logging
-#TODO: logging isn't going to stdout or stderr??
 from pathlib import Path
 import pandas as pd
 import os
@@ -21,10 +20,9 @@ class ImageFolderWithPaths(datasets.ImageFolder):
         # This is the standard ImageFolder behavior
         path, label = self.samples[index]
         image = self.loader(path)
+        
         # check if Path(path).stem is numeric with string methods
-
         image_id = int(Path(path).stem) if Path(path).stem.isdigit() else Path(path).stem
-        #int(Path(path).stem.split('_')[-1])
         if self.transform is not None:
             image = self.transform(image)
 
@@ -51,11 +49,7 @@ def accuracy(output, target, topk=(1,)):
 def process_results(logits, target, ids):
     pred_probs, pred_classes = logits.topk(5, 1, True, True)
     pred_probs = torch.nn.functional.softmax(pred_probs, dim=1).cpu()
-    # if len(ids.shape) == 1:
-    #     ids = ids.unsqueeze(1) # want shape batch_size x 1
-    # if len(target.shape) == 1:
-    #     target = target.unsqueeze(1) # want shape batch_size x 1
-    # new_rows = torch.cat([ids.cpu(), target.cpu(), pred_classes.cpu(), pred_probs], dim=1)
+
     column_values = [list(ids), 
         target.cpu().tolist(), 
         pred_classes.cpu()[:,0].tolist(), 
@@ -100,7 +94,6 @@ def run(model, classifier, dataloader, args):
                 logits = 100. * image_features @ classifier
 
             results = process_results(logits, target, ids)
-            # all_results = torch.cat([all_results, results], dim=0)
             all_results = pd.concat([all_results, results], ignore_index=True)
             # measure accuracy
             acc1, acc5 = accuracy(logits, target, topk=(1, 5))
@@ -108,9 +101,6 @@ def run(model, classifier, dataloader, args):
             top5 += acc5
             n += images.size(0)
     
-    # dtypes = {k: 'int' for k in RESULTS_COLNAMES[:7]}
-    # dtypes.update({k: 'float' for k in RESULTS_COLNAMES[7:]})
-    # results_df = pd.DataFrame(all_results.numpy(), columns=RESULTS_COLNAMES).astype(dtypes)
     top1 = (top1 / n)
     top5 = (top5 / n)
 
@@ -127,14 +117,11 @@ def zero_shot_eval(model, dataloader, args, tokenizer=None):
 
     logging.info('Building zero-shot classifier')
     autocast = get_autocast(args.precision)
-    #TODO: remove after test
-    cornbread_templates = [lambda c: f"{f(c)} and cornbread" for f in OPENAI_IMAGENET_TEMPLATES]
     with autocast():
         classifier = build_zero_shot_classifier(
             model,
             tokenizer=tokenizer,
             classnames=IMAGENET_CLASSNAMES,
-            # templates=cornbread_templates,
             templates=OPENAI_IMAGENET_TEMPLATES,
             num_classes_per_batch=10,
             device=args.device,
@@ -148,7 +135,6 @@ def zero_shot_eval(model, dataloader, args, tokenizer=None):
     results['imagenet-top1'] = top1
     results['imagenet-top5'] = top5
 
-    # outpath = Path(args.data_dir) / 'predictions_cornbread_template.csv'
     outpath = Path(args.data_dir) / f"predictions_{args.model}.csv"
     predictions.to_csv(outpath, index=False)
     print(f"Saved predictions to {outpath}")
@@ -192,8 +178,6 @@ if __name__ == '__main__':
 
     tokenizer = open_clip.get_tokenizer(args.model)
 
-    # dataset images saved in args.data_dir/class_id/pair_id.png
-    # class_id = idx in IMAGENET_CLASSNAMES (can't do name since ImageFolder sorts the dirnames and uses that order)
     dataset = ImageFolderWithPaths(args.data_dir, transform=preprocess_fn)
     dataloader = torch.utils.data.DataLoader(dataset, batch_size=args.batch_size, num_workers=2, shuffle=False)
 

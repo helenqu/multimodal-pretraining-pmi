@@ -26,7 +26,6 @@ def search_in_file(args):
     result = conn.execute(query, search_values).fetch_df()
     print("finished query", flush=True)
     
-    # result_queue.put(result)
     conn.close()
     return result
 
@@ -60,10 +59,8 @@ def get_word_pairs(questions_file, annotations_file=None, preds=None):
                 entry["gold_answer"] = max(entry["answers"], key=entry["answers"].count)
 
             answers = pd.DataFrame(answers)
-            # qa = pd.merge(questions, answers, on="question_id", how="inner")
         elif annotations_file.endswith(".jsonl"):
             answers = [x['answers'] for x in json.load(open(annotations_file, 'r'))['data']]
-            # qa = pd.DataFrame({"question": questions, "answers": answers})
             answers = pd.DataFrame({"answers": answers})
             answers["gold_answer"] = answers["answers"].apply(lambda x: max(x, key=x.count))
     
