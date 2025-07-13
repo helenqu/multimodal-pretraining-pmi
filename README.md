@@ -1,5 +1,5 @@
 # Impact of Pretraining Word Co-occurrence on Compositional Generalization in Multimodal Models
-This repository is the official implementation of [Impact of Pretraining Word Co-occurrence on Compositional Generalization in Multimodal Models](to_be_released).
+This repository is the official implementation of [Impact of Pretraining Word Co-occurrence on Compositional Generalization in Multimodal Models](https://arxiv.org/abs/2507.08000).
 
 ## Requirements
 
