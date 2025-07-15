@@ -101,4 +101,14 @@ To evaluate a finetuned model, run:
 
 Code and instructions for the fine-tuning the custom LLaVA-1.5 based on LAION-400M-pretrained CLIP and VQA evals are provided in [this repository](https://github.com/helenqu/llava-pretraining-pmi).
 
+## Citation
+If you found this repository helpful, please cite our paper!
+```bib
+@article{qu2025impact,
+  title={Impact of Pretraining Word Co-occurrence on Compositional Generalization in Multimodal Models},
+  author={Qu, Helen and Xie, Sang Michael},
+  journal={arXiv preprint arXiv:2507.08000},
+  year={2025}
+}
+```
 
